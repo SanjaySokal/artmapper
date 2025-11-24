@@ -328,6 +328,31 @@ npm run build
 npm start
 ```
 
+## Test Application
+
+A complete JavaScript test application is available in the `test-app/` directory:
+
+```bash
+cd test-app
+npm install
+npm start
+```
+
+Then in another terminal:
+```bash
+cd test-app
+npm test
+```
+
+The test application demonstrates:
+- ✅ All MySQL data types (ENUM, BOOLEAN, SET, JSON, BLOB, etc.)
+- ✅ Entity decorators in JavaScript
+- ✅ Repository pattern
+- ✅ Service layer
+- ✅ REST controllers
+- ✅ Dependency injection
+- ✅ Auto schema generation
+
 The example application will be available at `http://localhost:3000`
 
 ### Example API Endpoints
