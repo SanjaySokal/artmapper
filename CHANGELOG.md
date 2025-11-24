@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2025-11-24
+
+### Added
+- Full MySQL data type support including:
+  - ENUM types with custom values
+  - BOOLEAN/BOOL types (mapped to TINYINT(1))
+  - SET types with custom values
+  - All integer types (INT, BIGINT, SMALLINT, TINYINT, MEDIUMINT) with UNSIGNED support
+  - All floating point types (FLOAT, DOUBLE, DECIMAL, NUMERIC) with precision/scale
+  - All text types (TEXT, LONGTEXT, MEDIUMTEXT, TINYTEXT)
+  - All BLOB types (BLOB, LONGBLOB, MEDIUMBLOB, TINYBLOB)
+  - Binary types (BINARY, VARBINARY)
+  - Date/Time types with fractional seconds (DATE, TIME, DATETIME, TIMESTAMP, YEAR)
+  - JSON type
+  - BIT type
+  - Geometry types (GEOMETRY, POINT, LINESTRING, POLYGON, etc.)
+- Enhanced ColumnOptions with:
+  - `enum` - Array of enum values
+  - `unsigned` - For numeric types
+  - `zerofill` - For numeric types
+  - `autoIncrement` - Auto increment flag
+  - `comment` - Column comment
+  - `charset` - Character set
+  - `collate` - Collation
+  - `onUpdate` - ON UPDATE clause
+- Example Product entity demonstrating all data types
+
 ## [1.0.5] - 2025-11-24
 
 ### Added

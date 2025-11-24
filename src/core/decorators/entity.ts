@@ -19,6 +19,14 @@ export interface ColumnOptions {
   precision?: number;
   scale?: number;
   default?: any;
+  enum?: string[]; // For ENUM type - array of allowed values
+  unsigned?: boolean; // For numeric types
+  zerofill?: boolean; // For numeric types
+  autoIncrement?: boolean; // Auto increment
+  comment?: string; // Column comment
+  charset?: string; // Character set
+  collate?: string; // Collation
+  onUpdate?: string; // ON UPDATE clause (e.g., 'CURRENT_TIMESTAMP')
 }
 
 export interface GeneratedValueOptions {

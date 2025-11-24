@@ -128,7 +128,9 @@ export class SchemaGenerator {
     type?: string,
     length?: number,
     precision?: number,
-    scale?: number
+    scale?: number,
+    enumValues?: string[],
+    unsigned?: boolean
   ): string {
     if (!type) {
       return 'VARCHAR(255)';
@@ -136,32 +138,61 @@ export class SchemaGenerator {
 
     const upperType = type.toUpperCase();
 
+    // Handle ENUM type
+    if (upperType === 'ENUM' && enumValues && enumValues.length > 0) {
+      const enumStr = enumValues.map(val => `'${this.escapeString(val)}'`).join(',');
+      return `ENUM(${enumStr})`;
+    }
+
     switch (upperType) {
+      // Integer Types
       case 'INT':
       case 'INTEGER':
-        return 'INT';
+        return unsigned ? 'INT UNSIGNED' : 'INT';
       case 'BIGINT':
-        return 'BIGINT';
+        return unsigned ? 'BIGINT UNSIGNED' : 'BIGINT';
       case 'SMALLINT':
-        return 'SMALLINT';
+        return unsigned ? 'SMALLINT UNSIGNED' : 'SMALLINT';
       case 'TINYINT':
-        return 'TINYINT';
+        return unsigned ? 'TINYINT UNSIGNED' : 'TINYINT';
+      case 'MEDIUMINT':
+        return unsigned ? 'MEDIUMINT UNSIGNED' : 'MEDIUMINT';
+      
+      // Floating Point Types
       case 'FLOAT':
+        if (precision !== undefined) {
+          return scale !== undefined 
+            ? `FLOAT(${precision},${scale})`
+            : `FLOAT(${precision})`;
+        }
         return 'FLOAT';
       case 'DOUBLE':
+      case 'REAL':
+        if (precision !== undefined) {
+          return scale !== undefined 
+            ? `DOUBLE(${precision},${scale})`
+            : `DOUBLE(${precision})`;
+        }
         return 'DOUBLE';
       case 'DECIMAL':
       case 'NUMERIC':
+      case 'FIXED':
         if (precision && scale) {
           return `DECIMAL(${precision},${scale})`;
         } else if (precision) {
           return `DECIMAL(${precision})`;
         }
         return 'DECIMAL(10,2)';
+      
+      // String Types
       case 'VARCHAR':
         return length ? `VARCHAR(${length})` : 'VARCHAR(255)';
       case 'CHAR':
         return length ? `CHAR(${length})` : 'CHAR(1)';
+      case 'BINARY':
+        return length ? `BINARY(${length})` : 'BINARY(1)';
+      case 'VARBINARY':
+        return length ? `VARBINARY(${length})` : 'VARBINARY(255)';
       case 'TEXT':
         return 'TEXT';
       case 'LONGTEXT':
@@ -170,26 +201,99 @@ export class SchemaGenerator {
         return 'MEDIUMTEXT';
       case 'TINYTEXT':
         return 'TINYTEXT';
+      
+      // BLOB Types
       case 'BLOB':
         return 'BLOB';
       case 'LONGBLOB':
         return 'LONGBLOB';
+      case 'MEDIUMBLOB':
+        return 'MEDIUMBLOB';
+      case 'TINYBLOB':
+        return 'TINYBLOB';
+      
+      // Date and Time Types
       case 'DATE':
         return 'DATE';
       case 'TIME':
+        if (length !== undefined) {
+          return `TIME(${length})`;
+        }
         return 'TIME';
       case 'DATETIME':
+        if (length !== undefined) {
+          return `DATETIME(${length})`;
+        }
         return 'DATETIME';
       case 'TIMESTAMP':
+        if (length !== undefined) {
+          return `TIMESTAMP(${length})`;
+        }
         return 'TIMESTAMP';
+      case 'YEAR':
+        return length ? `YEAR(${length})` : 'YEAR';
+      
+      // Boolean Type (MySQL uses TINYINT(1))
       case 'BOOLEAN':
       case 'BOOL':
-        return 'BOOLEAN';
+        return 'TINYINT(1)';
+      
+      // JSON Type
       case 'JSON':
         return 'JSON';
+      
+      // Bit Type
+      case 'BIT':
+        return length ? `BIT(${length})` : 'BIT(1)';
+      
+      // Geometry Types
+      case 'GEOMETRY':
+        return 'GEOMETRY';
+      case 'POINT':
+        return 'POINT';
+      case 'LINESTRING':
+        return 'LINESTRING';
+      case 'POLYGON':
+        return 'POLYGON';
+      case 'MULTIPOINT':
+        return 'MULTIPOINT';
+      case 'MULTILINESTRING':
+        return 'MULTILINESTRING';
+      case 'MULTIPOLYGON':
+        return 'MULTIPOLYGON';
+      case 'GEOMETRYCOLLECTION':
+        return 'GEOMETRYCOLLECTION';
+      
+      // Set Type
+      case 'SET':
+        if (enumValues && enumValues.length > 0) {
+          const setStr = enumValues.map(val => `'${this.escapeString(val)}'`).join(',');
+          return `SET(${setStr})`;
+        }
+        return 'SET';
+      
       default:
         return length ? `VARCHAR(${length})` : 'VARCHAR(255)';
     }
+  }
+
+  /**
+   * Check if a type is numeric
+   */
+  private isNumericType(type?: string): boolean {
+    if (!type) return false;
+    const upperType = type.toUpperCase();
+    return [
+      'INT', 'INTEGER', 'BIGINT', 'SMALLINT', 'TINYINT', 'MEDIUMINT',
+      'FLOAT', 'DOUBLE', 'REAL', 'DECIMAL', 'NUMERIC', 'FIXED', 'BIT'
+    ].includes(upperType);
+  }
+
+  /**
+   * Escape string for SQL
+   */
+  private escapeString(str: string): string {
+    return str.replace(/'/g, "''").replace(/\\/g, '\\\\');
   }
 
   /**
