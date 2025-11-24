@@ -5,7 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2025-01-XX
+## [1.0.5] - 2025-11-24
+
+### Added
+- Enhanced TypeScript configuration with comprehensive compiler options
+- Added `jsconfig.json` for JavaScript project support
+- Improved module resolution and path mapping
+- Better support for mixed TypeScript/JavaScript projects
+
+### Changed
+- Updated `tsconfig.json` with detailed configuration for both TypeScript and JavaScript
+- Enhanced build configuration for better IDE support
+
+## [1.0.4] - 2025-11-24
+
+### Added
+- Initial npm publication
+- Complete documentation (API, Getting Started, Advanced)
+- GitHub repository setup
+
+## [1.0.0] - 2025-11-24
 
 ### Added
 - Initial release of Spring Boot TS

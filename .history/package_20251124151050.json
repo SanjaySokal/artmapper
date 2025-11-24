@@ -1,6 +1,6 @@
 {
   "name": "artmapper",
-  "version": "1.0.5",
+  "version": "1.0.4",
   "description": "Spring Boot clone for Node.js with TypeScript/JavaScript - JPA-like ORM, Lombok decorators, dependency injection, and MySQL support",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
