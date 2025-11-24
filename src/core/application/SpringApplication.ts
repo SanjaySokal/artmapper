@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import express, { Express, Request, Response, NextFunction } from 'express';
+import express, { Express, type Request, type Response, NextFunction } from 'express';
 import { Container } from '../di/Container';
 import { DatabaseManager, DatabaseConfig } from '../database/DatabaseConfig';
 import { SchemaGenerator } from '../database/SchemaGenerator';
